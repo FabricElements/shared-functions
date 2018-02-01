@@ -1,0 +1,33 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "lib": [
+      "es6"
+    ],
+    "target": "es6",
+    "noImplicitAny": false,
+    "outDir": "functions/lib",
+    "stripInternal": true,
+    "inlineSourceMap": false,
+    "strictNullChecks": false,
+    "alwaysStrict": false,
+    "allowJs": true,
+    "charset": "utf8",
+    "removeComments": false,
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "newLine": "LF",
+    "inlineSources": false,
+    "sourceMap": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "include": [
+    "functions/src/*.ts",
+    "functions/src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

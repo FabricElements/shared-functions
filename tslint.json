@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-eslint-rules",
+    "vrsource-tslint-rules"
+  ],
+  "rules": {
+    "file-header": [
+      true,
+      "Copyright FabricElements\\."
+    ],
+    "no-console": false,
+    "prefer-const": false
+  }
+}

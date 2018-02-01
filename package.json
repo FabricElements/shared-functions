@@ -1,0 +1,33 @@
+{
+  "name": "shared-functions",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FabricElements/shared-functions"
+  },
+  "main": "functions/lib/index.js",
+  "types": "./functions/src/index.ts",
+  "files": [
+    "functions/",
+    "LICENSE.md",
+    "README.md",
+    "functions/package.json"
+  ],
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "eslint": "^4.15.0",
+    "eslint-config-google": "^0.9.1",
+    "tslint": "^5.9.1",
+    "tslint-eslint-rules": "4.1.1",
+    "typescript": "^2.6.2",
+    "vrsource-tslint-rules": "5.1.1"
+  },
+  "scripts": {
+    "lint": "tslint -c tslint.json  --project . --project -t codeFrame",
+    "lint-fix": "tslint -c tslint.json --project .  --project -t codeFrame --fix",
+    "clear": "rm -rf ./functions/lib",
+    "build": "npm run clear && npm run lint && tsc -p ./tsconfig.json",
+    "tsc": "tsc"
+  },
+  "dependencies": {}
+}
