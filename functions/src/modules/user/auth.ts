@@ -85,7 +85,7 @@ export const created = functions.auth.user().onCreate(async (event) => {
 });
 
 /**
- * On user created
+ * On user deleted
  * @type {CloudFunction<UserRecord>}
  */
 export const deleted = functions.auth.user().onDelete(async (event) => {

@@ -82,7 +82,7 @@ exports.created = functions.auth.user().onCreate((event) => __awaiter(this, void
     }
 }));
 /**
- * On user created
+ * On user deleted
  * @type {CloudFunction<UserRecord>}
  */
 exports.deleted = functions.auth.user().onDelete((event) => __awaiter(this, void 0, void 0, function* () {
