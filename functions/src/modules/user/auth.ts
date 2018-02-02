@@ -106,7 +106,6 @@ export const deleted = functions.auth.user().onDelete(async (event) => {
     // Remove user related documents
     await firestore.removeDocument("users", uid);
     await firestore.removeDocument("users-account", uid);
-    await firestore.removeDocument("users-activities", uid);
     await firestore.removeDocument("users-avatars", uid);
     await firestore.removeDocument("users-friends", uid);
     await firestore.removeDocument("users-settings", uid);

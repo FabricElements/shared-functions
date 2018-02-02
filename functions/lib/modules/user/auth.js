@@ -101,7 +101,6 @@ exports.deleted = functions.auth.user().onDelete((event) => __awaiter(this, void
         // Remove user related documents
         yield firestore.removeDocument("users", uid);
         yield firestore.removeDocument("users-account", uid);
-        yield firestore.removeDocument("users-activities", uid);
         yield firestore.removeDocument("users-avatars", uid);
         yield firestore.removeDocument("users-friends", uid);
         yield firestore.removeDocument("users-settings", uid);

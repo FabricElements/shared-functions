@@ -17,10 +17,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * renamed as `demo-hello`.
  */
 // import demo from "./demo";
-const friends = require("./modules/friends/index");
+const friends = require("./modules/friends");
 exports.friends = friends;
-const index_1 = require("./modules/storage/index");
-exports.storage = index_1.default;
-const user = require("./modules/user/index");
+const helpers = require("./modules/helpers");
+exports.helpers = helpers;
+const shared = require("./modules/shared");
+exports.shared = shared;
+const storage_1 = require("./modules/storage");
+exports.storage = storage_1.default;
+const user = require("./modules/user");
 exports.user = user;
 //# sourceMappingURL=base.js.map

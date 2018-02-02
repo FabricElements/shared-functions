@@ -15,13 +15,17 @@
  * renamed as `demo-hello`.
  */
 // import demo from "./demo";
-import * as friends from "./modules/friends/index";
-import storage from "./modules/storage/index";
-import * as user from "./modules/user/index";
+import * as friends from "./modules/friends";
+import * as helpers from "./modules/helpers";
+import * as shared from "./modules/shared";
+import storage from "./modules/storage";
+import * as user from "./modules/user";
 
 export {
   // demo,
   friends,
+  helpers,
   storage,
   user,
+  shared,
 };
