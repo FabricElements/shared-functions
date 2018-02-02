@@ -24,7 +24,7 @@ export default (data, state) => {
     if (!data.user) {
       return;
     }
-    refBase = `users-avatars/${data.user}`;
+    refBase = `users/${data.user}/basic/avatars`;
     const id = parseInt(data.id, 2);
     imageJSON = {
       [id]: Date.now(),

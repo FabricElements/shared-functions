@@ -45,11 +45,12 @@ const updateUser = (uid: string, images: any[]) => {
     throw new Error(error);
   }
 };
+
 /**
  * Get summary for activities
  * @type {CloudFunction<DeltaDocumentSnapshot>}
  */
-export default functions.firestore.document("users-avatars/{uid}").onWrite(async (event) => {
+export default functions.firestore.document("users/{uid}/basic/avatars").onWrite(async (event) => {
   const uid = event.params.uid;
 
   if (!event.data.exists) {

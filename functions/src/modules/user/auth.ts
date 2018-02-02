@@ -62,18 +62,30 @@ export const created = functions.auth.user().onCreate(async (event) => {
   const name = user.displayName ? user.displayName : null;
   const email = user.email ? user.email : null;
   const providerData = user.providerData ? user.providerData : null;
-  const photoURL = user.photoURL ? user.photoURL : null;
+  const avatar = user.photoURL ? user.photoURL : null;
 
   try {
     // Set user profile
     await firestore.set("users", user.uid, {
+      avatar,
       name,
     });
 
     // Set basic user account
-    await firestore.set("users-account", user.uid, {
+    await firestore.set(`users/${user.uid}/private`, "account", {
       email,
       providerData,
+    });
+
+    // Set default users settings
+    await firestore.set(`users/${user.uid}/private`, "settings", {
+      dark: false,
+      monochrome: false,
+      notifications: {
+        email: true,
+        push: true,
+        sounds: true,
+      },
     });
 
     /*if (photoURL) {
@@ -93,16 +105,13 @@ export const deleted = functions.auth.user().onDelete(async (event) => {
   try {
     // Remove user related documents
     await firestore.removeDocument("users", uid);
-    await firestore.removeDocument("users-account", uid);
-    await firestore.removeDocument("users-avatars", uid);
-    await firestore.removeDocument("users-friends", uid);
-    await firestore.removeDocument("users-settings", uid);
-    await firestore.removeDocument("friends-requests", uid);
-    await firestore.removeDocument("ignored-users", uid);
+    await firestore.removeDocument("connections", uid);
+    await firestore.removeDocument("connection-request", uid);
+    await firestore.removeDocument("connection-ignored", uid);
     // Remove user from docs collection
-    await firestore.removeMatch("users-friends", uid);
-    await firestore.removeMatch("friends-requests", uid);
-    await firestore.removeMatch("ignored-users", uid);
+    await firestore.removeMatch("connections", uid);
+    await firestore.removeMatch("connection-request", uid);
+    await firestore.removeMatch("connection-ignored", uid);
   } catch (error) {
     throw new Error(error);
   }

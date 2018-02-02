@@ -55,7 +55,7 @@ const updateUser = (uid, images) => {
  * Get summary for activities
  * @type {CloudFunction<DeltaDocumentSnapshot>}
  */
-exports.default = functions.firestore.document("users-avatars/{uid}").onWrite((event) => __awaiter(this, void 0, void 0, function* () {
+exports.default = functions.firestore.document("users/{uid}/basic/avatars").onWrite((event) => __awaiter(this, void 0, void 0, function* () {
     const uid = event.params.uid;
     if (!event.data.exists) {
         try {

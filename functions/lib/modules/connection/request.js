@@ -43,10 +43,10 @@ exports.default = functions.firestore.document("connection-request/{userId}").on
         }
         return match.forEach((matchKey) => __awaiter(this, void 0, void 0, function* () {
             // Set friend connection
-            yield firestore.set(`users/${uid}/private`, "friends", {
+            yield firestore.set("connections", uid, {
                 [matchKey]: timestamp,
             }, true);
-            yield firestore.set(`users/${matchKey}/private`, "friends", {
+            yield firestore.set("connections", matchKey, {
                 [uid]: timestamp,
             }, true);
             // Remove requests from users

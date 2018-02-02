@@ -15,7 +15,7 @@
  * renamed as `demo-hello`.
  */
 // import demo from "./demo";
-import * as friends from "./modules/friends";
+import * as connection from "./modules/connection";
 import * as helpers from "./modules/helpers";
 import * as shared from "./modules/shared";
 import storage from "./modules/storage";
@@ -23,7 +23,7 @@ import * as user from "./modules/user";
 
 export {
   // demo,
-  friends,
+  connection,
   helpers,
   storage,
   user,

@@ -62,16 +62,27 @@ exports.created = functions.auth.user().onCreate((event) => __awaiter(this, void
     const name = user.displayName ? user.displayName : null;
     const email = user.email ? user.email : null;
     const providerData = user.providerData ? user.providerData : null;
-    const photoURL = user.photoURL ? user.photoURL : null;
+    const avatar = user.photoURL ? user.photoURL : null;
     try {
         // Set user profile
         yield firestore.set("users", user.uid, {
+            avatar,
             name,
         });
         // Set basic user account
-        yield firestore.set("users-account", user.uid, {
+        yield firestore.set(`users/${user.uid}/private`, "account", {
             email,
             providerData,
+        });
+        // Set default users settings
+        yield firestore.set(`users/${user.uid}/private`, "settings", {
+            dark: false,
+            monochrome: false,
+            notifications: {
+                email: true,
+                push: true,
+                sounds: true,
+            },
         });
         /*if (photoURL) {
           await storeImageFromSocial(user, photoURL);
@@ -90,16 +101,13 @@ exports.deleted = functions.auth.user().onDelete((event) => __awaiter(this, void
     try {
         // Remove user related documents
         yield firestore.removeDocument("users", uid);
-        yield firestore.removeDocument("users-account", uid);
-        yield firestore.removeDocument("users-avatars", uid);
-        yield firestore.removeDocument("users-friends", uid);
-        yield firestore.removeDocument("users-settings", uid);
-        yield firestore.removeDocument("friends-requests", uid);
-        yield firestore.removeDocument("ignored-users", uid);
+        yield firestore.removeDocument("connections", uid);
+        yield firestore.removeDocument("connection-request", uid);
+        yield firestore.removeDocument("connection-ignored", uid);
         // Remove user from docs collection
-        yield firestore.removeMatch("users-friends", uid);
-        yield firestore.removeMatch("friends-requests", uid);
-        yield firestore.removeMatch("ignored-users", uid);
+        yield firestore.removeMatch("connections", uid);
+        yield firestore.removeMatch("connection-request", uid);
+        yield firestore.removeMatch("connection-ignored", uid);
     }
     catch (error) {
         throw new Error(error);

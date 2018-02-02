@@ -17,8 +17,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * renamed as `demo-hello`.
  */
 // import demo from "./demo";
-const friends = require("./modules/friends");
-exports.friends = friends;
+const connection = require("./modules/connection");
+exports.connection = connection;
 const helpers = require("./modules/helpers");
 exports.helpers = helpers;
 const shared = require("./modules/shared");
