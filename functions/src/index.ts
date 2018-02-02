@@ -16,12 +16,12 @@
  */
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
-import * as base from "./base";
+import * as shared from "./base";
 
 const config = functions.config();
 admin.initializeApp(config.firebase);
 
 export {
   // demo,
-  base,
+  shared,
 };

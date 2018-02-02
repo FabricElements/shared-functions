@@ -76,21 +76,9 @@ export const created = functions.auth.user().onCreate(async (event) => {
       providerData,
     });
 
-    // Set default users settings
-    await firestore.set("users-settings", user.uid, {
-      dark: false,
-      monochrome: false,
-      notifications: {
-        email: true,
-        push: true,
-        sounds: true,
-      },
-    });
-
     /*if (photoURL) {
       await storeImageFromSocial(user, photoURL);
     }*/
-
   } catch (error) {
     throw new Error(error);
   }
@@ -109,7 +97,6 @@ export const deleted = functions.auth.user().onDelete(async (event) => {
     await firestore.removeDocument("users-avatars", uid);
     await firestore.removeDocument("users-friends", uid);
     await firestore.removeDocument("users-settings", uid);
-    await firestore.removeDocument("users-summary", uid);
     await firestore.removeDocument("friends-requests", uid);
     await firestore.removeDocument("ignored-users", uid);
     // Remove user from docs collection

@@ -73,16 +73,6 @@ exports.created = functions.auth.user().onCreate((event) => __awaiter(this, void
             email,
             providerData,
         });
-        // Set default users settings
-        yield firestore.set("users-settings", user.uid, {
-            dark: false,
-            monochrome: false,
-            notifications: {
-                email: true,
-                push: true,
-                sounds: true,
-            },
-        });
         /*if (photoURL) {
           await storeImageFromSocial(user, photoURL);
         }*/
@@ -104,7 +94,6 @@ exports.deleted = functions.auth.user().onDelete((event) => __awaiter(this, void
         yield firestore.removeDocument("users-avatars", uid);
         yield firestore.removeDocument("users-friends", uid);
         yield firestore.removeDocument("users-settings", uid);
-        yield firestore.removeDocument("users-summary", uid);
         yield firestore.removeDocument("friends-requests", uid);
         yield firestore.removeDocument("ignored-users", uid);
         // Remove user from docs collection
