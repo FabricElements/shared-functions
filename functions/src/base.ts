@@ -14,14 +14,14 @@
  * example the function `hello` inside the required module `demo` will be
  * renamed as `demo-hello`.
  */
-import * as admin from "firebase-admin";
-import * as functions from "firebase-functions";
-import * as base from "./base";
-
-const config = functions.config();
-admin.initializeApp(config.firebase);
+// import demo from "./demo";
+import * as friends from "./modules/friends/index";
+import storage from "./modules/storage/index";
+import * as user from "./modules/user/index";
 
 export {
   // demo,
-  base,
+  friends,
+  storage,
+  user,
 };

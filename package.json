@@ -5,8 +5,8 @@
     "type": "git",
     "url": "https://github.com/FabricElements/shared-functions"
   },
-  "main": "functions/lib/index.js",
-  "types": "./functions/src/index.ts",
+  "main": "functions/lib/base.js",
+  "types": "functions/src/base.ts",
   "files": [
     "functions/",
     "LICENSE.md",

@@ -68,7 +68,3 @@ bower_components
 ## Compiler
 /src/*.js
 /src/**/*.js
-## Functions folder
-/functions/lib/
-/functions/*.js
-/functions/**/*.js

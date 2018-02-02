@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @license
  * Copyright FabricElements. All Rights Reserved.
@@ -14,14 +16,10 @@
  * example the function `hello` inside the required module `demo` will be
  * renamed as `demo-hello`.
  */
-import * as admin from "firebase-admin";
-import * as functions from "firebase-functions";
-import * as base from "./base";
-
+const admin = require("firebase-admin");
+const functions = require("firebase-functions");
+const base = require("./base");
+exports.base = base;
 const config = functions.config();
 admin.initializeApp(config.firebase);
-
-export {
-  // demo,
-  base,
-};
+//# sourceMappingURL=index.js.map
