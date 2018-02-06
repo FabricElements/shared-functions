@@ -14,5 +14,6 @@ export interface InterfaceUser {
   providerData?: any;
   photoURL?: string | null;
   disabled?: boolean;
+  phoneNumber?: string | null;
   uid?: string;
 }
