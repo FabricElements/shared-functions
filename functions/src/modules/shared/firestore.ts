@@ -133,17 +133,12 @@ export const deleteField = async (collection: string, doc: string, field: string
 export const removeMatch = async (collection: string, id: string) => {
   const db = admin.firestore();
   const ref = db.collection(collection);
-  return ref.orderBy(id).get().then(async (snapshot) => {
-    if (!snapshot || !snapshot.docs) {
-      return [];
-    }
-    // const docs = snapshot.docs.map((doc) => doc.id);
-    await snapshot.forEach((doc) => {
-      return deleteField(collection, doc.id, id);
-    });
-  }).catch((error) => {
-    // console.error("Error getting documents", error);
-    throw new Error(error);
+  const snapshot = await ref.orderBy(id).get();
+  if (!snapshot || !snapshot.docs) {
+    return;
+  }
+  await snapshot.forEach((doc) => {
+    return deleteField(collection, doc.id, id);
   });
 };
 

@@ -135,17 +135,12 @@ exports.deleteField = (collection, doc, field) => __awaiter(this, void 0, void 0
 exports.removeMatch = (collection, id) => __awaiter(this, void 0, void 0, function* () {
     const db = admin.firestore();
     const ref = db.collection(collection);
-    return ref.orderBy(id).get().then((snapshot) => __awaiter(this, void 0, void 0, function* () {
-        if (!snapshot || !snapshot.docs) {
-            return [];
-        }
-        // const docs = snapshot.docs.map((doc) => doc.id);
-        yield snapshot.forEach((doc) => {
-            return exports.deleteField(collection, doc.id, id);
-        });
-    })).catch((error) => {
-        // console.error("Error getting documents", error);
-        throw new Error(error);
+    const snapshot = yield ref.orderBy(id).get();
+    if (!snapshot || !snapshot.docs) {
+        return;
+    }
+    yield snapshot.forEach((doc) => {
+        return exports.deleteField(collection, doc.id, id);
     });
 });
 /**
