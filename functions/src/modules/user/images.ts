@@ -21,7 +21,7 @@ const getFirst = (uid, images: any[]) => {
     return "";
   }
   let imageUrl = `https://${config.imgix.domain}/`;
-  imageUrl += `users/${uid}/avatar/${images[0]}.jpg`;
+  imageUrl += `user/${uid}/avatar/${images[0]}.jpg`;
   imageUrl += "?fit=crop&crop=faces&w=500&h=500&mask=ellipse&fm=png";
   return imageUrl;
 };
@@ -50,13 +50,13 @@ const updateUser = (uid: string, images: any[]) => {
  * Get summary for activities
  * @type {CloudFunction<DeltaDocumentSnapshot>}
  */
-export default functions.firestore.document("users/{uid}/basic/avatars").onWrite(async (event) => {
+export default functions.firestore.document("user/{uid}/basic/avatars").onWrite(async (event) => {
   const uid = event.params.uid;
 
   if (!event.data.exists) {
     try {
       await updateUser(uid, []);
-      return firestore.deleteField("users", uid, "images");
+      return firestore.deleteField("user", uid, "images");
     } catch (error) {
       throw new Error(error);
     }
@@ -74,7 +74,7 @@ export default functions.firestore.document("users/{uid}/basic/avatars").onWrite
 
     await updateUser(uid, imageList);
 
-    await firestore.set("users", uid, {
+    await firestore.set("user", uid, {
       images: imageList,
     }, true);
   } catch (error) {

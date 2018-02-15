@@ -27,7 +27,7 @@ const storeImageFromSocial = (user, photoURL) => {
     const fileMetadata = { customMetadata: { type: "avatar", id: 1, user: user.uid } };
     const bucket = gcs().bucket("fabricelements.appspot.com");
     // bucket.upload(photoURL, {
-    //   destination: `images/users/${user.uid}/avatar/1.jpg`,
+    //   destination: `images/user/${user.uid}/avatar/1.jpg`,
     //   metadata: fileMetadata,
     // });
     const options = {
@@ -65,17 +65,17 @@ exports.created = functions.auth.user().onCreate((event) => __awaiter(this, void
     const avatar = user.photoURL ? user.photoURL : null;
     try {
         // Set user profile
-        yield firestore.set("users", user.uid, {
+        yield firestore.set("user", user.uid, {
             avatar,
             name,
         });
         // Set basic user account
-        yield firestore.set(`users/${user.uid}/private`, "account", {
+        yield firestore.set(`user/${user.uid}/private`, "account", {
             email,
             providerData,
         });
         // Set default users settings
-        yield firestore.set(`users/${user.uid}/private`, "settings", {
+        yield firestore.set(`user/${user.uid}/private`, "settings", {
             dark: false,
             monochrome: false,
             notifications: {
@@ -100,7 +100,7 @@ exports.deleted = functions.auth.user().onDelete((event) => __awaiter(this, void
     const uid = event.data.uid;
     try {
         // Remove user related documents
-        yield firestore.removeDocument("users", uid);
+        yield firestore.removeDocument("user", uid);
         yield firestore.removeDocument("connections", uid);
         yield firestore.removeDocument("connection-request", uid);
         yield firestore.removeDocument("connection-ignored", uid);

@@ -23,7 +23,7 @@ const storeImageFromSocial = async (user, photoURL) => {
   const bucket = admin.storage().bucket();
 
   // bucket.upload(photoURL, {
-  //   destination: `images/users/${user.uid}/avatar/1.jpg`,
+  //   destination: `images/user/${user.uid}/avatar/1.jpg`,
   //   metadata: fileMetadata,
   // });
 

@@ -23,7 +23,7 @@ const storeImageFromSocial = (user, photoURL) => {
   const bucket = gcs().bucket("fabricelements.appspot.com");
 
   // bucket.upload(photoURL, {
-  //   destination: `images/users/${user.uid}/avatar/1.jpg`,
+  //   destination: `images/user/${user.uid}/avatar/1.jpg`,
   //   metadata: fileMetadata,
   // });
 
@@ -66,19 +66,19 @@ export const created = functions.auth.user().onCreate(async (event) => {
 
   try {
     // Set user profile
-    await firestore.set("users", user.uid, {
+    await firestore.set("user", user.uid, {
       avatar,
       name,
     });
 
     // Set basic user account
-    await firestore.set(`users/${user.uid}/private`, "account", {
+    await firestore.set(`user/${user.uid}/private`, "account", {
       email,
       providerData,
     });
 
     // Set default users settings
-    await firestore.set(`users/${user.uid}/private`, "settings", {
+    await firestore.set(`user/${user.uid}/private`, "settings", {
       dark: false,
       monochrome: false,
       notifications: {
@@ -104,7 +104,7 @@ export const deleted = functions.auth.user().onDelete(async (event) => {
   const uid = event.data.uid;
   try {
     // Remove user related documents
-    await firestore.removeDocument("users", uid);
+    await firestore.removeDocument("user", uid);
     await firestore.removeDocument("connections", uid);
     await firestore.removeDocument("connection-request", uid);
     await firestore.removeDocument("connection-ignored", uid);

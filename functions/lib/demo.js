@@ -27,7 +27,7 @@ const storeImageFromSocial = (user, photoURL) => __awaiter(this, void 0, void 0,
     // const bucket = gcs().bucket("fabricelements.appspot.com");
     const bucket = admin.storage().bucket();
     // bucket.upload(photoURL, {
-    //   destination: `images/users/${user.uid}/avatar/1.jpg`,
+    //   destination: `images/user/${user.uid}/avatar/1.jpg`,
     //   metadata: fileMetadata,
     // });
     const options = {

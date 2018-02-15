@@ -49,7 +49,7 @@ const getFirstImage = (uid, images) => {
         return null;
     }
     let imageUrl = `https://${config.imgix.domain}/`;
-    imageUrl += `users/${uid}/avatar/${image}.jpg`;
+    imageUrl += `user/${uid}/avatar/${image}.jpg`;
     imageUrl += "?fit=crop&crop=faces&w=500&h=500&mask=ellipse&fm=png";
     return imageUrl;
 };
@@ -57,7 +57,7 @@ const getFirstImage = (uid, images) => {
  * Update displayName when de user name changes
  * @type {CloudFunction<DeltaDocumentSnapshot>}
  */
-exports.update = functions.firestore.document("users/{userId}").onUpdate((event) => __awaiter(this, void 0, void 0, function* () {
+exports.update = functions.firestore.document("user/{userId}").onUpdate((event) => __awaiter(this, void 0, void 0, function* () {
     const uid = event.params.userId;
     const previousValue = event.data.previous.data();
     const newValue = event.data.data();
