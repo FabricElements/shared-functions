@@ -12,18 +12,19 @@ const FieldValue = admin.firestore.FieldValue;
  * @param {string} collection
  * @return {Array}
  */
-export const getCollection = async (collection: string) => {
+export const getCollectionArray = async (collection) => {
   const db = admin.firestore();
   const ref = db.collection(collection);
+
   // const data = await ref.where("capital", "==", true).get();
-  return ref.get().then((snapshot) => {
-    if (!snapshot || !snapshot.docs) {
-      return [];
-    }
-    return snapshot.docs.map((doc) => doc.id);
-  }).catch((error) => {
-    // console.error("Error getting documents", error);
-    throw new Error(error);
+  const snapshot = await ref.get();
+  if (!snapshot || !snapshot.docs) {
+    return [];
+  }
+  return snapshot.docs.map((doc) => {
+    let docData: any | object = doc.data();
+    docData.id = doc.id;
+    return docData;
   });
 };
 

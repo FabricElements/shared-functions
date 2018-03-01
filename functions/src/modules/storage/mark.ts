@@ -11,10 +11,8 @@ import * as admin from "firebase-admin";
  * @param state
  * @return {Promise<T>}
  */
-export default (data, state) => {
+export default async (data, state) => {
   let refBase = null;
-  let write = "update";
-
   let imageJSON = {};
   if (!data.id || !data.type) {
     return;
@@ -43,16 +41,15 @@ export default (data, state) => {
   const db = admin.firestore();
   const doc = db.doc(refBase);
 
-  if (state === "not_exists") {
-    return doc.update(imageJSON).then(() => {
+  try {
+    if (state === "not_exists") {
+      await doc.update(imageJSON);
       console.log("Image deleted!");
-    }).catch((error) => {
-      throw new Error(error);
-    });
-  }
-  return doc.set(imageJSON, {merge: true}).then(() => {
-    console.log("Image added");
-  }).catch((error) => {
+    } else {
+      await doc.set(imageJSON, {merge: true});
+      console.log("Image added");
+    }
+  } catch (error) {
     throw new Error(error);
-  });
+  }
 };

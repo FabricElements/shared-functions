@@ -1,4 +1,12 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @license
@@ -12,9 +20,8 @@ const admin = require("firebase-admin");
  * @param state
  * @return {Promise<T>}
  */
-exports.default = (data, state) => {
+exports.default = (data, state) => __awaiter(this, void 0, void 0, function* () {
     let refBase = null;
-    let write = "update";
     let imageJSON = {};
     if (!data.id || !data.type) {
         return;
@@ -39,17 +46,18 @@ exports.default = (data, state) => {
     }
     const db = admin.firestore();
     const doc = db.doc(refBase);
-    if (state === "not_exists") {
-        return doc.update(imageJSON).then(() => {
+    try {
+        if (state === "not_exists") {
+            yield doc.update(imageJSON);
             console.log("Image deleted!");
-        }).catch((error) => {
-            throw new Error(error);
-        });
+        }
+        else {
+            yield doc.set(imageJSON, { merge: true });
+            console.log("Image added");
+        }
     }
-    return doc.set(imageJSON, { merge: true }).then(() => {
-        console.log("Image added");
-    }).catch((error) => {
+    catch (error) {
         throw new Error(error);
-    });
-};
+    }
+});
 //# sourceMappingURL=mark.js.map

@@ -19,18 +19,18 @@ const FieldValue = admin.firestore.FieldValue;
  * @param {string} collection
  * @return {Array}
  */
-exports.getCollection = (collection) => __awaiter(this, void 0, void 0, function* () {
+exports.getCollectionArray = (collection) => __awaiter(this, void 0, void 0, function* () {
     const db = admin.firestore();
     const ref = db.collection(collection);
     // const data = await ref.where("capital", "==", true).get();
-    return ref.get().then((snapshot) => {
-        if (!snapshot || !snapshot.docs) {
-            return [];
-        }
-        return snapshot.docs.map((doc) => doc.id);
-    }).catch((error) => {
-        // console.error("Error getting documents", error);
-        throw new Error(error);
+    const snapshot = yield ref.get();
+    if (!snapshot || !snapshot.docs) {
+        return [];
+    }
+    return snapshot.docs.map((doc) => {
+        let docData = doc.data();
+        docData.id = doc.id;
+        return docData;
     });
 });
 /**
