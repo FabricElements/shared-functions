@@ -75,9 +75,9 @@ export default functions.https.onRequest(async (request, response) => {
   let user = {uid: "OCSn2Q1iVHNguWQvMVZQYDY4Zyj2"};
   let photoURL = "https://lh5.googleusercontent.com/-Jn0ysyLSmaA/AAAAAAAAAAI/AAAAAAAAA9g/rPX_9MlNK4M/photo.jpg";
   try {
-    const final = await storeImageFromSocial(user, photoURL);
-    return response.status(200).end(final);
+    await storeImageFromSocial(user, photoURL);
+    response.status(200).end("all good");
   } catch (error) {
-    return response.status(500).end(error);
+    response.status(500).end(error);
   }
 });

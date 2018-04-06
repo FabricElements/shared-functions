@@ -37,7 +37,7 @@ export const purge = (url) => {
 
   return rp(options)
     .then((parsedBody) => {
-      return console.log("Image purged:", clearRef);
+      console.log("Image purged:", clearRef);
     })
     .catch((error) => {
       const finalError = `Image clean up went wrong: ${error}`;

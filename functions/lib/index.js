@@ -17,9 +17,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * renamed as `demo-hello`.
  */
 const admin = require("firebase-admin");
-const functions = require("firebase-functions");
 const shared = require("./base");
 exports.shared = shared;
-const config = functions.config();
-admin.initializeApp(config.firebase);
+admin.initializeApp();
 //# sourceMappingURL=index.js.map

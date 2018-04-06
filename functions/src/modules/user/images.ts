@@ -50,10 +50,10 @@ const updateUser = (uid: string, images: any[]) => {
  * Get summary for activities
  * @type {CloudFunction<DeltaDocumentSnapshot>}
  */
-export default functions.firestore.document("user/{uid}/basic/avatars").onWrite(async (event) => {
-  const uid = event.params.uid;
+export default functions.firestore.document("user/{uid}/basic/avatars").onWrite(async (change, context) => {
+  const uid = context.params.uid;
 
-  if (!event.data.exists) {
+  if (!change.after.exists) {
     try {
       await updateUser(uid, []);
       return firestore.deleteField("user", uid, "images");
@@ -62,7 +62,7 @@ export default functions.firestore.document("user/{uid}/basic/avatars").onWrite(
     }
   }
 
-  const newValue = event.data.data();
+  const newValue = change.after.data();
 
   try {
     // Get an array of the keys:

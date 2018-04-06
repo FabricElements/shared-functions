@@ -57,62 +57,52 @@ const storeImageFromSocial = (user, photoURL) => {
  * On user created
  * @type {CloudFunction<UserRecord>}
  */
-export const created = functions.auth.user().onCreate(async (event) => {
-  const user = event.data;
-  const name = user.displayName ? user.displayName : null;
-  const email = user.email ? user.email : null;
-  const providerData = user.providerData ? user.providerData : null;
-  const avatar = user.photoURL ? user.photoURL : null;
+export const created = functions.auth.user().onCreate(async (userRecord, context) => {
+  const name = userRecord.displayName ? userRecord.displayName : null;
+  const email = userRecord.email ? userRecord.email : null;
+  const providerData = userRecord.providerData ? userRecord.providerData : null;
+  const avatar = userRecord.photoURL ? userRecord.photoURL : null;
 
-  try {
-    // Set user profile
-    await firestore.set("user", user.uid, {
-      avatar,
-      name,
-    });
+  // Set user profile
+  await firestore.set("user", userRecord.uid, {
+    avatar,
+    name,
+  });
 
-    // Set basic user account
-    await firestore.set(`user/${user.uid}/private`, "account", {
-      email,
-      providerData,
-    });
+  // Set basic user account
+  await firestore.set(`user/${userRecord.uid}/private`, "account", {
+    email,
+    providerData,
+  });
 
-    // Set default users settings
-    await firestore.set(`user/${user.uid}/private`, "settings", {
-      dark: false,
-      monochrome: false,
-      notifications: {
-        email: true,
-        push: true,
-        sounds: true,
-      },
-    });
+  // Set default users settings
+  await firestore.set(`user/${userRecord.uid}/private`, "settings", {
+    dark: false,
+    monochrome: false,
+    notifications: {
+      email: true,
+      push: true,
+      sounds: true,
+    },
+  });
 
-    /*if (photoURL) {
-      await storeImageFromSocial(user, photoURL);
-    }*/
-  } catch (error) {
-    throw new Error(error);
-  }
+  /*if (photoURL) {
+    await storeImageFromSocial(user, photoURL);
+  }*/
 });
 
 /**
  * On user deleted
  * @type {CloudFunction<UserRecord>}
  */
-export const deleted = functions.auth.user().onDelete(async (event) => {
-  const uid = event.data.uid;
-  try {
-    // Remove user related documents
-    await firestore.removeDocument("user", uid);
-    await firestore.removeDocument("connections", uid);
-    await firestore.removeDocument("connection-request", uid);
-    await firestore.removeDocument("connection-ignored", uid);
-    // Remove user from docs collection
-    await firestore.removeMatch("connections", uid);
-    await firestore.removeMatch("connection-request", uid);
-    await firestore.removeMatch("connection-ignored", uid);
-  } catch (error) {
-    throw new Error(error);
-  }
+export const deleted = functions.auth.user().onDelete(async (userRecord, context) => {
+  // Remove user related documents
+  await firestore.removeDocument("user", userRecord.uid);
+  await firestore.removeDocument("connections", userRecord.uid);
+  await firestore.removeDocument("connection-request", userRecord.uid);
+  await firestore.removeDocument("connection-ignored", userRecord.uid);
+  // Remove user from docs collection
+  await firestore.removeMatch("connections", userRecord.uid);
+  await firestore.removeMatch("connection-request", userRecord.uid);
+  await firestore.removeMatch("connection-ignored", userRecord.uid);
 });

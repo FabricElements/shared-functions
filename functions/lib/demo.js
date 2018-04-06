@@ -76,11 +76,11 @@ exports.default = functions.https.onRequest((request, response) => __awaiter(thi
     let user = { uid: "OCSn2Q1iVHNguWQvMVZQYDY4Zyj2" };
     let photoURL = "https://lh5.googleusercontent.com/-Jn0ysyLSmaA/AAAAAAAAAAI/AAAAAAAAA9g/rPX_9MlNK4M/photo.jpg";
     try {
-        const final = yield storeImageFromSocial(user, photoURL);
-        return response.status(200).end(final);
+        yield storeImageFromSocial(user, photoURL);
+        response.status(200).end("all good");
     }
     catch (error) {
-        return response.status(500).end(error);
+        response.status(500).end(error);
     }
 }));
 //# sourceMappingURL=demo.js.map

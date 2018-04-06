@@ -20,21 +20,15 @@ const config = functions.config();
 /**
  * Storage base function
  */
-exports.default = functions.storage.object().onChange((event) => __awaiter(this, void 0, void 0, function* () {
-    const object = event.data; // The Storage object.
+exports.default = functions.storage.object().onFinalize((object, context) => __awaiter(this, void 0, void 0, function* () {
     const fileBucket = object.bucket; // The Storage bucket that contains the file.
     const filePath = object.name; // File path in the bucket.
     const contentType = object.contentType; // File content type.
-    const resourceState = object.resourceState; // The resourceState is 'exists' or 'not_exists' (for file/folder deletions).
     const metageneration = object.metageneration; // Number of times metadata has been generated. New objects have a value of 1.
-    // Exit if this is a move or deletion event.
-    if (resourceState === "not_exists") {
-        console.log("This is a deletion event.");
-    }
     if (contentType.startsWith("image/")) {
         if (object.metadata) {
             try {
-                yield mark_1.default(object.metadata, resourceState);
+                yield mark_1.default(object.metadata, true);
             }
             catch (error) {
                 throw new Error(error);

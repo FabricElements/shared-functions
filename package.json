@@ -15,19 +15,24 @@
   ],
   "license": "BSD-3-Clause",
   "devDependencies": {
-    "eslint": "^4.15.0",
+    "eslint": "^4.17.0",
     "eslint-config-google": "^0.9.1",
     "tslint": "^5.9.1",
     "tslint-eslint-rules": "4.1.1",
-    "typescript": "^2.6.2",
+    "typescript": "^2.7.1",
     "vrsource-tslint-rules": "5.1.1"
   },
   "scripts": {
-    "lint": "tslint -c tslint.json  --project . --project -t codeFrame",
+    "lint": "tslint --project tsconfig.json",
     "lint-fix": "tslint -c tslint.json --project .  --project -t codeFrame --fix",
     "clear": "rm -rf ./functions/lib",
     "build": "npm run clear && npm run lint && tsc -p ./tsconfig.json",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "serve": "npm run build && firebase serve --only functions",
+    "shell": "npm run build && firebase experimental:functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
   },
   "dependencies": {}
 }

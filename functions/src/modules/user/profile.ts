@@ -55,10 +55,10 @@ const getFirstImage = (uid, images) => {
  * Update displayName when de user name changes
  * @type {CloudFunction<DeltaDocumentSnapshot>}
  */
-export const update = functions.firestore.document("user/{userId}").onUpdate(async (event) => {
-  const uid = event.params.userId;
-  const previousValue = event.data.previous.data();
-  const newValue = event.data.data();
+export const update = functions.firestore.document("user/{userId}").onUpdate(async (change, context) => {
+  const uid = context.params.userId;
+  const previousValue = change.before.data();
+  const newValue = change.after.data();
   const name = newValue.name ? newValue.name : null;
   const prevName = previousValue.name ? previousValue.name : null;
   const prevDisabled = !!previousValue.disabled;

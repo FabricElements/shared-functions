@@ -17,10 +17,10 @@ const admin = require("firebase-admin");
  * Mark ond DB depending on type
  *
  * @param data
- * @param state
+ * @param exists
  * @return {Promise<T>}
  */
-exports.default = (data, state) => __awaiter(this, void 0, void 0, function* () {
+exports.default = (data, exists) => __awaiter(this, void 0, void 0, function* () {
     let refBase = null;
     let imageJSON = {};
     if (!data.id || !data.type) {
@@ -35,7 +35,7 @@ exports.default = (data, state) => __awaiter(this, void 0, void 0, function* () 
         imageJSON = {
             [id]: Date.now(),
         };
-        if (state === "not_exists") {
+        if (!exists) {
             imageJSON = {
                 [id]: admin.firestore.FieldValue.delete(),
             };
@@ -47,7 +47,7 @@ exports.default = (data, state) => __awaiter(this, void 0, void 0, function* () 
     const db = admin.firestore();
     const doc = db.doc(refBase);
     try {
-        if (state === "not_exists") {
+        if (!exists) {
             yield doc.update(imageJSON);
             console.log("Image deleted!");
         }

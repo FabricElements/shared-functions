@@ -55,9 +55,9 @@ const updateUser = (uid, images) => {
  * Get summary for activities
  * @type {CloudFunction<DeltaDocumentSnapshot>}
  */
-exports.default = functions.firestore.document("user/{uid}/basic/avatars").onWrite((event) => __awaiter(this, void 0, void 0, function* () {
-    const uid = event.params.uid;
-    if (!event.data.exists) {
+exports.default = functions.firestore.document("user/{uid}/basic/avatars").onWrite((change, context) => __awaiter(this, void 0, void 0, function* () {
+    const uid = context.params.uid;
+    if (!change.after.exists) {
         try {
             yield updateUser(uid, []);
             return firestore.deleteField("user", uid, "images");
@@ -66,7 +66,7 @@ exports.default = functions.firestore.document("user/{uid}/basic/avatars").onWri
             throw new Error(error);
         }
     }
-    const newValue = event.data.data();
+    const newValue = change.after.data();
     try {
         // Get an array of the keys:
         let imageList = Object.keys(newValue);

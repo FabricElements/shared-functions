@@ -139,7 +139,7 @@ exports.removeMatch = (collection, id) => __awaiter(this, void 0, void 0, functi
     if (!snapshot || !snapshot.docs) {
         return;
     }
-    yield snapshot.forEach((doc) => {
+    snapshot.forEach((doc) => {
         return exports.deleteField(collection, doc.id, id);
     });
 });

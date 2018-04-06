@@ -138,7 +138,7 @@ export const removeMatch = async (collection: string, id: string) => {
   if (!snapshot || !snapshot.docs) {
     return;
   }
-  await snapshot.forEach((doc) => {
+  snapshot.forEach((doc) => {
     return deleteField(collection, doc.id, id);
   });
 };

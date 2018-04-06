@@ -15,10 +15,10 @@ const timestamp = FieldValue.serverTimestamp();
  * Update displayName when de user name changes
  * @type {CloudFunction<DeltaDocumentSnapshot>}
  */
-export default functions.firestore.document("connection-request/{userId}").onUpdate(async (event) => {
-  const uid = event.params.userId;
-  const previousValue = event.data.previous.data();
-  const newValue = event.data.data();
+export default functions.firestore.document("connection-request/{userId}").onUpdate(async (change, context) => {
+  const uid = context.params.userId;
+  const previousValue = change.before.data();
+  const newValue = change.after.data();
   // Basic validation
   if (!newValue || newValue === previousValue) {
     return;
@@ -36,7 +36,7 @@ export default functions.firestore.document("connection-request/{userId}").onUpd
       return;
     }
 
-    return match.forEach(async (matchKey) => {
+    match.forEach(async (matchKey) => {
       // Set friend connection
       await firestore.set("connections", uid, {
         [matchKey]: timestamp,

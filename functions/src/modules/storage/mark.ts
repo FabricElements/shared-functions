@@ -8,10 +8,10 @@ import * as admin from "firebase-admin";
  * Mark ond DB depending on type
  *
  * @param data
- * @param state
+ * @param exists
  * @return {Promise<T>}
  */
-export default async (data, state) => {
+export default async (data, exists) => {
   let refBase = null;
   let imageJSON = {};
   if (!data.id || !data.type) {
@@ -27,7 +27,7 @@ export default async (data, state) => {
     imageJSON = {
       [id]: Date.now(),
     };
-    if (state === "not_exists") {
+    if (!exists) {
       imageJSON = {
         [id]: admin.firestore.FieldValue.delete(),
       };
@@ -42,7 +42,7 @@ export default async (data, state) => {
   const doc = db.doc(refBase);
 
   try {
-    if (state === "not_exists") {
+    if (!exists) {
       await doc.update(imageJSON);
       console.log("Image deleted!");
     } else {
