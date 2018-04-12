@@ -6,4 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 const firestore = require("./firestore");
 exports.firestore = firestore;
+const slack = require("./slack");
+exports.slack = slack;
 //# sourceMappingURL=index.js.map

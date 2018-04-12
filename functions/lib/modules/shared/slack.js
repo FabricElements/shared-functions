@@ -8,7 +8,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @license
+ * Copyright FabricElements. All Rights Reserved.
+ */
 const functions = require("firebase-functions");
+const rp = require("request-promise");
+// Example:
+// https://github.com/firebase/functions-samples/tree/9ce5109babd4f3b240d097debdc570dbe7383682/crashlytics-integration/slack-notifier
+// Helper function that posts to Slack about the new issue
+const notifySlack = (slackMessage) => {
+    // See https://api.slack.com/docs/message-formatting on how
+    // to customize the message payload
+    return rp({
+        body: {
+            text: slackMessage,
+        },
+        json: true,
+        method: "POST",
+        uri: functions.config().slack.webhook_url,
+    });
+};
 /**
  * Send messages to Slack
  *
@@ -21,5 +41,9 @@ exports.message = functions.pubsub.topic("slack-message").onPublish((message) =>
         console.error("channel attribute is missing");
         return;
     }
+    message = "Test message";
+    return notifySlack(message).then(() => {
+        return console.log(`Message to channel ${channelId} successfully sent to Slack`);
+    });
 }));
 //# sourceMappingURL=slack.js.map
