@@ -5,13 +5,12 @@
 import {IncomingWebhook} from "@slack/client";
 import * as functions from "firebase-functions";
 
-const config = functions.config();
-const slackWebhook = config.slack && config.slack.webhook ? config.slack.webhook : null;
-
 export default functions.pubsub.topic("slack-message").onPublish(async (message) => {
   try {
+    const config = functions.config();
+    const slackWebhook = config.slack && config.slack.webhook ? config.slack.webhook : null;
     if (!slackWebhook) {
-      throw new Error("slack token undefined");
+      throw new Error("slack.webhook undefined");
     }
     const webhook = new IncomingWebhook(slackWebhook);
     const jsonObject = message.json;
