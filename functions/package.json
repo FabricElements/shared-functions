@@ -2,8 +2,10 @@
   "name": "functions",
   "main": "lib/index.js",
   "types": "src/index.ts",
+  "devDependencies": {
+    "@firebase/app-types": "^0.1.2"
+  },
   "dependencies": {
-    "@firebase/app-types": "^0.1.2",
     "@google-cloud/pubsub": "^0.18.0",
     "@google-cloud/storage": "^1.6.0",
     "@slack/client": "^4.1.0",
