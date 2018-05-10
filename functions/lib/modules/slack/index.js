@@ -14,9 +14,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 const client_1 = require("@slack/client");
 const functions = require("firebase-functions");
+const config = functions.config();
 exports.default = functions.pubsub.topic("slack-message").onPublish((message) => __awaiter(this, void 0, void 0, function* () {
     try {
-        const config = functions.config();
         const slackWebhook = config.slack && config.slack.webhook ? config.slack.webhook : null;
         if (!slackWebhook) {
             throw new Error("slack.webhook undefined");
