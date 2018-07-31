@@ -1,12 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @license
@@ -23,7 +15,7 @@ const timestamp = FieldValue.serverTimestamp();
  * Update displayName when de user name changes
  * @type {CloudFunction<DeltaDocumentSnapshot>}
  */
-exports.default = functions.firestore.document("connection-request/{userId}").onUpdate((change, context) => __awaiter(this, void 0, void 0, function* () {
+exports.default = functions.firestore.document("connection-request/{userId}").onUpdate(async (change, context) => {
     const uid = context.params.userId;
     const previousValue = change.before.data();
     const newValue = change.after.data();
@@ -35,27 +27,27 @@ exports.default = functions.firestore.document("connection-request/{userId}").on
         // List of users that requested connection to the user
         const friendRequest = Object.keys(newValue).map((key) => key);
         // List of users that the user already send the friend request
-        const friendsRequest = yield firestore.getOrderByBasic("connection-request", uid);
+        const friendsRequest = await firestore.getOrderByBasic("connection-request", uid);
         // Return the difference between users and baseList to show as recommendation
-        const match = yield arrays.repeated(friendRequest, friendsRequest);
+        const match = await arrays.repeated(friendRequest, friendsRequest);
         if (!friendRequest.length || !friendsRequest.length || !match.length) {
             return;
         }
-        match.forEach((matchKey) => __awaiter(this, void 0, void 0, function* () {
+        match.forEach(async (matchKey) => {
             // Set friend connection
-            yield firestore.set("connections", uid, {
+            await firestore.set("connections", uid, {
                 [matchKey]: timestamp,
             }, true);
-            yield firestore.set("connections", matchKey, {
+            await firestore.set("connections", matchKey, {
                 [uid]: timestamp,
             }, true);
             // Remove requests from users
-            yield firestore.deleteField("connection-request", matchKey, uid);
-            yield firestore.deleteField("connection-request", uid, matchKey);
-        }));
+            await firestore.deleteField("connection-request", matchKey, uid);
+            await firestore.deleteField("connection-request", uid, matchKey);
+        });
     }
     catch (error) {
         throw new Error(error);
     }
-}));
+});
 //# sourceMappingURL=request.js.map

@@ -1,12 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @license
@@ -57,7 +49,7 @@ const getFirstImage = (uid, images) => {
  * Update displayName when de user name changes
  * @type {CloudFunction<DeltaDocumentSnapshot>}
  */
-exports.update = functions.firestore.document("user/{userId}").onUpdate((change, context) => __awaiter(this, void 0, void 0, function* () {
+exports.update = functions.firestore.document("user/{userId}").onUpdate(async (change, context) => {
     const uid = context.params.userId;
     const previousValue = change.before.data();
     const newValue = change.after.data();
@@ -100,5 +92,5 @@ exports.update = functions.firestore.document("user/{userId}").onUpdate((change,
     catch (error) {
         throw new Error(error);
     }
-}));
+});
 //# sourceMappingURL=profile.js.map

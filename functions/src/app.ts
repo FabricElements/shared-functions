@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @license
  * Copyright FabricElements. All Rights Reserved.
@@ -17,16 +15,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * renamed as `demo-hello`.
  */
 // import demo from "./demo";
-const connection = require("./modules/connection");
-exports.connection = connection;
-const helpers = require("./modules/helpers");
-exports.helpers = helpers;
-const shared = require("./modules/shared");
-exports.shared = shared;
-const slack_1 = require("./modules/slack");
-exports.slack = slack_1.default;
-const storage_1 = require("./modules/storage");
-exports.storage = storage_1.default;
-const user = require("./modules/user");
-exports.user = user;
-//# sourceMappingURL=base.js.map
+// import * as connection from "./modules/connection";
+// import * as helpers from "./modules/helpers";
+// import * as shared from "./modules/shared";
+// import slack from "./modules/slack";
+import storage from "./modules/storage";
+import * as user from "./modules/user";
+
+export {
+  // demo,
+  // connection,
+  // helpers,
+  storage,
+  user,
+  // shared,
+  // slack,
+};

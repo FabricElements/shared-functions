@@ -15,11 +15,16 @@
  * renamed as `demo-hello`.
  */
 import * as admin from "firebase-admin";
-import * as shared from "./base";
 
+/**
+ * Init firebase app first
+ */
 admin.initializeApp();
-
-export {
-  // demo,
-  shared,
-};
+const firestore = admin.firestore();
+firestore.settings({
+  timestampsInSnapshots: true,
+});
+/**
+ * Export app modules after the app is initialized
+ */
+export * from "./app";

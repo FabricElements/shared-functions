@@ -1,22 +1,34 @@
 {
-  "name": "shared-functions",
+  "name": "functions",
   "version": "0.0.2",
   "repository": {
     "type": "git",
-    "url": "https://github.com/FabricElements/shared-functions"
+    "url": "git@github.com:FabricElements/shared-functions.git"
   },
-  "main": "functions/lib/base.js",
-  "types": "functions/src/base.ts",
-  "files": [
-    "functions/lib/",
-    "functions/src/",
-    "functions/package.json",
-    "LICENSE.md",
-    "README.md"
-  ],
-  "license": "BSD-3-Clause",
-  "devDependencies": {
+  "engines": {
+    "node": "8"
+  },
+  "main": "lib/app.js",
+  "types": "src/app.ts",
+  "scripts": {
+    "lint": "tslint --project tsconfig.json",
+    "lint-fix": "tslint -c tslint.json --project .  --project -t codeFrame --fix",
+    "clear": "rm -rf ./functions/lib",
+    "build": "npm run clear && npm run lint && tsc -p ./tsconfig.json",
+    "tsc": "tsc"
+  },
+  "dependencies": {
     "@firebase/app-types": "^0.1.2",
+    "@google-cloud/pubsub": "^0.18.0",
+    "@google-cloud/storage": "^0.4.0",
+    "@slack/client": "^4.3.1",
+    "cors": "^2.8.4",
+    "firebase-admin": "^5.13.1",
+    "firebase-functions": "^2.0.2",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2"
+  },
+  "devDependencies": {
     "eslint": "^4.17.0",
     "eslint-config-google": "^0.9.1",
     "tslint": "^5.9.1",
@@ -24,26 +36,5 @@
     "typescript": "^2.7.1",
     "vrsource-tslint-rules": "5.1.1"
   },
-  "scripts": {
-    "lint": "tslint --project tsconfig.json",
-    "lint-fix": "tslint -c tslint.json --project .  --project -t codeFrame --fix",
-    "clear": "rm -rf ./functions/lib",
-    "build": "npm run clear && npm run lint && tsc -p ./tsconfig.json",
-    "tsc": "tsc",
-    "serve": "npm run build && firebase serve --only functions",
-    "shell": "npm run build && firebase experimental:functions:shell",
-    "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
-  },
-  "dependencies": {
-    "@google-cloud/pubsub": "^0.18.0",
-    "@google-cloud/storage": "^1.6.0",
-    "@slack/client": "^4.1.0",
-    "cors": "^2.8.4",
-    "firebase-admin": "^5.12.0",
-    "firebase-functions": "^1.0.0",
-    "request": "^2.83.0",
-    "request-promise": "^4.2.2"
-  }
+  "private": true
 }

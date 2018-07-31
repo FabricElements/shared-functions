@@ -1,12 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @license
@@ -39,27 +31,22 @@ const getFirst = (uid, images) => {
  * @param {Array} images
  * @return {Promise<admin.auth.UserRecord>}
  */
-const updateUser = (uid, images) => {
+const updateUser = async (uid, images) => {
     let photoURL = getFirst(uid, images);
     let user = {
         photoURL,
     };
-    try {
-        return admin.auth().updateUser(uid, user);
-    }
-    catch (error) {
-        throw new Error(error);
-    }
+    await admin.auth().updateUser(uid, user);
 };
 /**
  * Get summary for activities
  * @type {CloudFunction<DeltaDocumentSnapshot>}
  */
-exports.default = functions.firestore.document("user/{uid}/basic/avatars").onWrite((change, context) => __awaiter(this, void 0, void 0, function* () {
+exports.default = functions.firestore.document("user/{uid}/basic/avatars").onWrite(async (change, context) => {
     const uid = context.params.uid;
     if (!change.after.exists) {
         try {
-            yield updateUser(uid, []);
+            await updateUser(uid, []);
             return firestore.deleteField("user", uid, "images");
         }
         catch (error) {
@@ -74,13 +61,13 @@ exports.default = functions.firestore.document("user/{uid}/basic/avatars").onWri
         imageList.sort((a, b) => {
             return newValue[b] - newValue[a];
         });
-        yield updateUser(uid, imageList);
-        yield firestore.set("user", uid, {
+        await updateUser(uid, imageList);
+        await firestore.set("user", uid, {
             images: imageList,
         }, true);
     }
     catch (error) {
         throw new Error(error);
     }
-}));
+});
 //# sourceMappingURL=images.js.map

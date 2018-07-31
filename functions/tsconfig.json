@@ -2,30 +2,32 @@
   "compileOnSave": true,
   "compilerOptions": {
     "lib": [
-      "es6"
+      "es2017"
     ],
-    "target": "es6",
+    "target": "es2017",
     "noImplicitAny": false,
-    "outDir": "functions/lib",
+    "outDir": "lib",
     "stripInternal": true,
+    "inlineSources": false,
     "inlineSourceMap": false,
+    "forceConsistentCasingInFileNames": true,
     "strictNullChecks": false,
+    "skipLibCheck": true,
     "alwaysStrict": false,
     "allowJs": true,
     "charset": "utf8",
-    "removeComments": false,
     "module": "commonjs",
     "moduleResolution": "Node",
     "newLine": "LF",
-    "inlineSources": false,
+    "pretty": true,
+    "removeComments": false,
     "sourceMap": true,
     "typeRoots": [
       "node_modules/@types"
     ]
   },
   "include": [
-    "functions/src/*.ts",
-    "functions/src/**/*.ts"
+    "src"
   ],
   "exclude": [
     "node_modules"

@@ -1,12 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @license
@@ -20,7 +12,7 @@ const config = functions.config();
 /**
  * Storage base function
  */
-exports.default = functions.storage.object().onFinalize((object, context) => __awaiter(this, void 0, void 0, function* () {
+exports.default = functions.storage.object().onFinalize(async (object, context) => {
     const fileBucket = object.bucket; // The Storage bucket that contains the file.
     const filePath = object.name; // File path in the bucket.
     const contentType = object.contentType; // File content type.
@@ -28,21 +20,21 @@ exports.default = functions.storage.object().onFinalize((object, context) => __a
     if (contentType.startsWith("image/")) {
         if (object.metadata) {
             try {
-                yield mark_1.default(object.metadata, true);
+                await mark_1.default(object.metadata, true);
             }
             catch (error) {
                 throw new Error(error);
             }
         }
         try {
-            yield imgIX.purge(filePath);
+            await imgIX.purge(filePath);
         }
         catch (error) {
             throw new Error(error);
         }
     }
-    return;
+    return null;
     // Get the file name.
     // const fileName = path.basename(filePath);
-}));
+});
 //# sourceMappingURL=index.js.map

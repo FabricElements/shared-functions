@@ -1,4 +1,7 @@
 "use strict";
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @license
@@ -17,7 +20,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * renamed as `demo-hello`.
  */
 const admin = require("firebase-admin");
-const shared = require("./base");
-exports.shared = shared;
+/**
+ * Init firebase app first
+ */
 admin.initializeApp();
+const firestore = admin.firestore();
+firestore.settings({
+    timestampsInSnapshots: true,
+});
+/**
+ * Export app modules after the app is initialized
+ */
+__export(require("./app"));
 //# sourceMappingURL=index.js.map

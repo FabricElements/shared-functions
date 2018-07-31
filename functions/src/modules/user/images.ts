@@ -33,17 +33,12 @@ const getFirst = (uid, images: any[]) => {
  * @param {Array} images
  * @return {Promise<admin.auth.UserRecord>}
  */
-const updateUser = (uid: string, images: any[]) => {
+const updateUser = async (uid: string, images: any[]) => {
   let photoURL = getFirst(uid, images);
   let user: interfaces.InterfaceUser = {
     photoURL,
   };
-
-  try {
-    return admin.auth().updateUser(uid, user);
-  } catch (error) {
-    throw new Error(error);
-  }
+  await admin.auth().updateUser(uid, user);
 };
 
 /**

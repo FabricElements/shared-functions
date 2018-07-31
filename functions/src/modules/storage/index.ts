@@ -33,7 +33,7 @@ export default functions.storage.object().onFinalize(async (object, context) => 
     }
   }
 
-  return;
+  return null;
   // Get the file name.
   // const fileName = path.basename(filePath);
 });

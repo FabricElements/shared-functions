@@ -7,7 +7,7 @@
   "rules": {
     "file-header": [
       true,
-      "Copyright FabricElements. All Rights Reserved\\."
+      "Copyright FabricElements\\."
     ],
     // -- Strict errors --
     // These lint rules are likely always a good idea.
@@ -102,21 +102,21 @@
 
     // prefer for( ... of ... ) to an index loop when the index is only used to fetch an object from an array.
     // (Even better: check out utils like .map if transforming an array!)
-    "prefer-for-of": {
-      "severity": "warning"
-    },
+//    "prefer-for-of": {
+//      "severity": "warning"
+//    },
     // Warns if function overloads could be unified into a single function with optional or rest parameters.
     "unified-signatures": {
       "severity": "warning"
     },
     // Warns if code has an import or variable that is unused.
-    "no-unused-variable": {
-      "severity": "warning"
-    },
+//    "no-unused-variable": {
+//      "severity": "warning"
+//    },
     // Prefer const for values that will not change. This better documents code.
-    //    "prefer-const": {
-    //      "severity": "warning"
-    //    },
+//    "prefer-const": {
+//      "severity": "warning"
+//    },
     // Multi-line object liiterals and function calls should have a trailing comma. This helps avoid merge conflicts.
     "trailing-comma": {
       "severity": "warning"
