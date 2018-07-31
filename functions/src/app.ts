@@ -16,7 +16,7 @@
  */
 // import demo from "./demo";
 // import * as connection from "./modules/connection";
-// import * as helpers from "./modules/helpers";
+import * as helpers from "./modules/helpers";
 // import * as shared from "./modules/shared";
 // import slack from "./modules/slack";
 import storage from "./modules/storage";
@@ -25,7 +25,7 @@ import * as user from "./modules/user";
 export {
   // demo,
   // connection,
-  // helpers,
+  helpers,
   storage,
   user,
   // shared,

@@ -18,7 +18,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 // import demo from "./demo";
 // import * as connection from "./modules/connection";
-// import * as helpers from "./modules/helpers";
+const helpers = require("./modules/helpers");
+exports.helpers = helpers;
 // import * as shared from "./modules/shared";
 // import slack from "./modules/slack";
 const storage_1 = require("./modules/storage");

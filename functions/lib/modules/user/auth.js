@@ -35,8 +35,11 @@ const storeImageFromSocial = async (uid, photoURL) => {
  * On user created
  * @type {CloudFunction<UserRecord>}
  */
-exports.created = functions.auth.user().onCreate(async (userRecord, context) => {
+exports.created = functions.auth.user().onCreate(async (userRecord) => {
     const uid = userRecord.uid || null;
+    if (!uid) {
+        throw new Error("uid is undefined");
+    }
     const photoURL = userRecord.photoURL || null;
     try {
         console.info("Try to save user basic info");
