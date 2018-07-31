@@ -23,7 +23,7 @@ const storeImageFromSocial = async (uid, photoURL) => {
         metadata: {
             contentType: "image/jpeg",
             metadata: {
-                id: 1,
+                id: "1",
                 type: "avatar",
                 user: uid
             },
