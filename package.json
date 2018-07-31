@@ -1,5 +1,5 @@
 {
-  "name": "functions",
+  "name": "shared-functions",
   "version": "0.0.2",
   "repository": {
     "type": "git",
@@ -8,8 +8,8 @@
   "engines": {
     "node": "8"
   },
-  "main": "lib/app.js",
-  "types": "src/app.ts",
+  "main": "functions/lib/app.js",
+  "types": "functions/src/app.ts",
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "lint-fix": "tslint -c tslint.json --project .  --project -t codeFrame --fix",
