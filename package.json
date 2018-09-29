@@ -11,10 +11,11 @@
   "main": "functions/lib/app.js",
   "types": "functions/src/app.ts",
   "scripts": {
-    "lint": "tslint --project tsconfig.json",
-    "lint-fix": "tslint -c tslint.json --project .  --project -t codeFrame --fix",
+    "build": "npm run clear && npm run lint && tsc -p ./functions/tsconfig.json",
     "clear": "rm -rf ./functions/lib",
-    "build": "npm run clear && npm run lint && tsc -p ./tsconfig.json",
+    "lint-fix": "tslint -c tslint.json --project .  --project -t codeFrame --fix",
+    "lint": "tslint --project ./functions/tsconfig.json",
+    "prepare": "npm run build",
     "tsc": "tsc"
   },
   "dependencies": {
