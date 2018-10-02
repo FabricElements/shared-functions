@@ -12,7 +12,7 @@
   "types": "functions/src/app.ts",
   "scripts": {
     "build": "npm run clear && npm run lint && tsc -p ./functions/tsconfig.json",
-    "clear": "rm -rf ./functions/lib",
+    "clear": "rimraf -r ./functions/lib",
     "lint-fix": "tslint -c tslint.json --project .  --project -t codeFrame --fix",
     "lint": "tslint --project ./functions/tsconfig.json",
     "prepare": "npm run build",

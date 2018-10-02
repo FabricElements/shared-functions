@@ -15,9 +15,12 @@ const firestore = require("../shared/firestore");
  * @return {Promise<void>}
  */
 const storeImageFromSocial = async (uid, photoURL) => {
+    const projectId = process.env.GCLOUD_PROJECT;
     console.log("obtainImageFromSocial");
+    console.log(`PhotoURL: ${photoURL}`);
+    console.log(`Project ID: ${projectId}`);
     // https://stackoverflow.com/questions/41352150/typeerror-firebase-storage-is-not-a-function
-    const fileRef = admin.storage().bucket();
+    const fileRef = admin.storage().bucket(`${projectId}.appspot.com`);
     await fileRef.upload(photoURL, {
         destination: `images/user/${uid}/avatar/1.jpg`,
         metadata: {
@@ -35,7 +38,7 @@ const storeImageFromSocial = async (uid, photoURL) => {
  * On user created
  * @type {CloudFunction<UserRecord>}
  */
-exports.created = functions.auth.user().onCreate(async (userRecord) => {
+exports.created = functions.auth.user().onCreate(async (userRecord, context) => {
     const uid = userRecord.uid || null;
     if (!uid) {
         throw new Error("uid is undefined");
@@ -46,22 +49,28 @@ exports.created = functions.auth.user().onCreate(async (userRecord) => {
         const db = admin.firestore();
         let batch = db.batch();
         // Set user profile
-        const refUser = db.collection("user").doc(uid);
-        batch.set(refUser, {
+        const batchUser = {
             avatar: photoURL,
             backup: false,
-            name: userRecord.displayName || null,
-        }, { merge: true });
+            name: userRecord.displayName || null
+        };
+        const refUser = db.collection("user").doc(uid);
+        batch.set(refUser, batchUser, { merge: true });
         // Set basic user account
-        const refUserAccount = db.collection("user-account").doc(uid);
-        batch.set(refUserAccount, {
+        // const _providerData = userRecord.providerData || null;
+        // console.info(`Provider Info: ${_providerData}`);
+        const batchAccount = {
             backup: false,
+            displayName: userRecord.displayName || null,
             email: userRecord.email || null,
-            providerData: userRecord.providerData || null,
-        }, { merge: true });
+            photoURL: userRecord.photoURL || null,
+            uid: (uid)
+            // providerData: _providerData
+        };
+        const refUserAccount = db.collection("user-account").doc(uid);
+        batch.set(refUserAccount, batchAccount, { merge: true });
         // Set default users settings
-        const refUserSettings = db.collection("user-settings").doc(uid);
-        batch.set(refUserSettings, {
+        const batchSettings = {
             backup: false,
             dark: false,
             monochrome: false,
@@ -70,7 +79,9 @@ exports.created = functions.auth.user().onCreate(async (userRecord) => {
                 push: true,
                 sounds: true,
             },
-        }, { merge: true });
+        };
+        const refUserSettings = db.collection("user-settings").doc(uid);
+        batch.set(refUserSettings, batchSettings, { merge: true });
         await batch.commit();
         console.info("Info saved");
     }
