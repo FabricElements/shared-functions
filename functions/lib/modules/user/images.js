@@ -11,19 +11,35 @@ const config = functions.config();
 /**
  * Get first item formatted
  *
+ * @param imageURL
+ * @return {boolean}
+ */
+const imageVerify = (imageURL) => {
+    const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+    const regexp = new RegExp(urlRegex);
+    return regexp.test(imageURL);
+};
+/**
+ * Get first item formatted
+ *
  * @param uid
  * @param {Array} images
  * @return {string}
  */
 const getFirst = (uid, images) => {
     if (!images.length) {
-        return "";
+        return;
     }
     let imageUrl = `https://${config.imgix.domain}/`;
     imageUrl += `user/${uid}/avatar/${images[0]}.jpg`;
     imageUrl += "?fit=crop&crop=faces&w=500&h=500&mask=ellipse&fm=png";
-    console.info(`Image URL: ${imageUrl}`);
-    return imageUrl;
+    if (!imageVerify(imageUrl)) {
+        console.log(`ImageUrl invalid: ${imageUrl}`);
+        return;
+    }
+    else {
+        return imageUrl;
+    }
 };
 /**
  * Update user
@@ -34,13 +50,10 @@ const getFirst = (uid, images) => {
  */
 const updateUser = async (uid, images) => {
     let photoURL = getFirst(uid, images);
-    console.info(`getFirst passed with: ${photoURL}`);
     let user = {
         photoURL,
     };
-    console.info(`user passed with: ${user}`);
     await admin.auth().updateUser(uid, user);
-    console.info(`updateUser finished`);
 };
 /**
  * Get summary for activities
@@ -51,7 +64,6 @@ exports.default = functions.firestore.document("user/{uid}/basic/avatars").onWri
     if (!change.after.exists) {
         try {
             await updateUser(uid, []);
-            console.info(`updateUser (if) passed`);
             return firestore.deleteField("user", uid, "images");
         }
         catch (error) {
@@ -59,7 +71,6 @@ exports.default = functions.firestore.document("user/{uid}/basic/avatars").onWri
         }
     }
     const newValue = change.after.data();
-    console.info(`newValue: ${newValue}`);
     try {
         // Get an array of the keys:
         let imageList = Object.keys(newValue);
@@ -68,7 +79,6 @@ exports.default = functions.firestore.document("user/{uid}/basic/avatars").onWri
             return newValue[b] - newValue[a];
         });
         await updateUser(uid, imageList);
-        console.info(`updateUser (try) passed`);
         await firestore.set("user", uid, {
             images: imageList,
         }, true);

@@ -28,7 +28,7 @@
   "scripts": {
     "lint": "tslint --project ./tsconfig.json",
     "lint-fix": "tslint -c tslint.json --project .  --project -t codeFrame --fix",
-    "clear": "rimraf -r ./lib",
+    "clear": "rm -rf ./lib",
     "build": "npm run clear && npm run lint && tsc -p ./tsconfig.json",
     "tsc": "tsc",
     "deploy": "gcloud app deploy",

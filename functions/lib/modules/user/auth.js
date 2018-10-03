@@ -15,12 +15,8 @@ const firestore = require("../shared/firestore");
  * @return {Promise<void>}
  */
 const storeImageFromSocial = async (uid, photoURL) => {
-    const projectId = process.env.GCLOUD_PROJECT;
-    console.log("obtainImageFromSocial");
-    console.log(`PhotoURL: ${photoURL}`);
-    console.log(`Project ID: ${projectId}`);
-    // https://stackoverflow.com/questions/41352150/typeerror-firebase-storage-is-not-a-function
-    const fileRef = admin.storage().bucket(`${projectId}.appspot.com`);
+    const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
+    const fileRef = admin.storage().bucket(adminConfig.storageBucket);
     await fileRef.upload(photoURL, {
         destination: `images/user/${uid}/avatar/1.jpg`,
         metadata: {
@@ -57,15 +53,13 @@ exports.created = functions.auth.user().onCreate(async (userRecord, context) => 
         const refUser = db.collection("user").doc(uid);
         batch.set(refUser, batchUser, { merge: true });
         // Set basic user account
-        // const _providerData = userRecord.providerData || null;
-        // console.info(`Provider Info: ${_providerData}`);
         const batchAccount = {
             backup: false,
             displayName: userRecord.displayName || null,
             email: userRecord.email || null,
+            phoneNumber: userRecord.phoneNumber || null,
             photoURL: userRecord.photoURL || null,
             uid: (uid)
-            // providerData: _providerData
         };
         const refUserAccount = db.collection("user-account").doc(uid);
         batch.set(refUserAccount, batchAccount, { merge: true });

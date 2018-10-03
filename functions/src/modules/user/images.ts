@@ -12,19 +12,37 @@ const config = functions.config();
 /**
  * Get first item formatted
  *
+ * @param imageURL
+ * @return {boolean}
+ */
+
+const imageVerify = (imageURL: string): boolean => {
+  const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+  const regexp = new RegExp(urlRegex);
+  return regexp.test(imageURL);
+};
+
+/**
+ * Get first item formatted
+ *
  * @param uid
  * @param {Array} images
  * @return {string}
  */
+
 const getFirst = (uid, images: any[]) => {
   if (!images.length) {
-    return "";
+    return;
   }
   let imageUrl = `https://${config.imgix.domain}/`;
   imageUrl += `user/${uid}/avatar/${images[0]}.jpg`;
   imageUrl += "?fit=crop&crop=faces&w=500&h=500&mask=ellipse&fm=png";
-  console.info(`Image URL: ${imageUrl}`);
-  return imageUrl;
+  if (!imageVerify(imageUrl)) {
+    console.log(`ImageUrl invalid: ${imageUrl}`);
+    return;
+  } else {
+    return imageUrl;
+  }
 };
 
 /**
@@ -34,15 +52,12 @@ const getFirst = (uid, images: any[]) => {
  * @param {Array} images
  * @return {Promise<admin.auth.UserRecord>}
  */
-const updateUser = async (uid: string, images: any[]) => {
+const updateUser = async (uid: string, images?: any[]) => {
   let photoURL = getFirst(uid, images);
-  console.info(`getFirst passed with: ${photoURL}`);
   let user: interfaces.InterfaceUser = {
     photoURL,
   };
-  console.info(`user passed with: ${user}`);
   await admin.auth().updateUser(uid, user);
-  console.info(`updateUser finished`);
 };
 
 /**
@@ -55,7 +70,6 @@ export default functions.firestore.document("user/{uid}/basic/avatars").onWrite(
   if (!change.after.exists) {
     try {
       await updateUser(uid, []);
-      console.info(`updateUser (if) passed`);
       return firestore.deleteField("user", uid, "images");
     } catch (error) {
       throw new Error(error);
@@ -63,7 +77,6 @@ export default functions.firestore.document("user/{uid}/basic/avatars").onWrite(
   }
 
   const newValue = change.after.data();
-  console.info(`newValue: ${newValue}`);
 
   try {
     // Get an array of the keys:
@@ -74,7 +87,6 @@ export default functions.firestore.document("user/{uid}/basic/avatars").onWrite(
     });
 
     await updateUser(uid, imageList);
-    console.info(`updateUser (try) passed`);
 
     await firestore.set("user", uid, {
       images: imageList,
