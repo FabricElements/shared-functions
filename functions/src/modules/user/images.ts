@@ -12,18 +12,37 @@ const config = functions.config();
 /**
  * Get first item formatted
  *
+ * @param imageURL
+ * @return {boolean}
+ */
+
+const imageVerify = (imageURL: string): boolean => {
+  const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+  const regexp = new RegExp(urlRegex);
+  return regexp.test(imageURL);
+};
+
+/**
+ * Get first item formatted
+ *
  * @param uid
  * @param {Array} images
  * @return {string}
  */
+
 const getFirst = (uid, images: any[]) => {
   if (!images.length) {
-    return "";
+    return;
   }
   let imageUrl = `https://${config.imgix.domain}/`;
   imageUrl += `user/${uid}/avatar/${images[0]}.jpg`;
   imageUrl += "?fit=crop&crop=faces&w=500&h=500&mask=ellipse&fm=png";
-  return imageUrl;
+  if (!imageVerify(imageUrl)) {
+    console.log(`ImageUrl invalid: ${imageUrl}`);
+    return;
+  } else {
+    return imageUrl;
+  }
 };
 
 /**
@@ -33,7 +52,7 @@ const getFirst = (uid, images: any[]) => {
  * @param {Array} images
  * @return {Promise<admin.auth.UserRecord>}
  */
-const updateUser = async (uid: string, images: any[]) => {
+const updateUser = async (uid: string, images?: any[]) => {
   let photoURL = getFirst(uid, images);
   let user: interfaces.InterfaceUser = {
     photoURL,
