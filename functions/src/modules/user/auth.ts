@@ -5,6 +5,8 @@
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
 import * as firestore from "../shared/firestore";
+import * as pubSub from "@google-cloud/pubsub";
+import { user } from "firebase-functions/lib/providers/auth";
 
 /**
  * Store image from social network
@@ -108,3 +110,68 @@ export const deleted = functions.auth.user().onDelete(async (userRecord, context
   await firestore.removeMatch("connection-request", userRecord.uid);
   await firestore.removeMatch("connection-ignored", userRecord.uid);
 });
+
+/**
+ * PubSub basic event
+ *
+ * @param {object} data
+ * @param {object} attributes
+ * @returns {Promise}
+ */
+const publishEvent = (data: object = {}, attributes: object = {}) => {
+  const message = JSON.stringify(data);
+  const dataBuffer = Buffer.from(message);
+  return publisher.publish(dataBuffer, attributes);
+};
+
+const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
+admin.initializeApp(adminConfig);
+
+const publisher = pubSub({
+  projectId: adminConfig.projectId,
+}).topic("update-user", {}).publisher();
+
+const update = async (nextPageToken) => {
+  // List batch of users, 1000 at a time.
+  return admin.auth().listUsers(2, nextPageToken)
+    .then(async (listUsersResult) => {
+      const db = admin.firestore();
+
+      for(const user of listUsersResult.users) {
+        try {
+          // Set user profile
+          const batchUser = {
+            avatar: user.photoURL || null,
+            backup: false,
+            name: user.displayName || null
+          };
+          const refUser = db.collection("auth-backup").doc(user.uid);
+          const doc = await refUser.get();
+          const data = doc.data();
+
+          if (!doc.exists) {
+            console.log(`Adding ${user.uid} to the db`)
+            refUser.set(batchUser, {merge: true});
+          }
+
+          if(user.displayName !== data.name || user.photoURL !== data.avatar) {
+            console.log('Publishing')
+            await publishEvent({user});
+            console.log('Event sent')
+          }
+
+        } catch (error) {
+          throw error;
+        }
+      }
+
+      if (listUsersResult.pageToken) {
+        // List next batch of users.
+        return update(listUsersResult.pageToken)
+      }
+    })
+    .catch(function(error) {
+      console.error("Error listing users:", error);
+      throw error
+    });
+}
