@@ -66,5 +66,6 @@ bower_components
 ## Project config
 ############################################
 ## Compiler
+/functions/lib
 /src/*.js
 /src/**/*.js
