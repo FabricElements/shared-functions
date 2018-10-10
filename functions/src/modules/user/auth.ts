@@ -5,7 +5,7 @@
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
 import * as firestore from "../shared/firestore";
-import * as pubSub from "@google-cloud/pubsub";
+import { publish as publishEvent } from "../helpers/pubsub.js";
 import { user } from "firebase-functions/lib/providers/auth";
 
 /**
@@ -112,26 +112,6 @@ export const deleted = functions.auth.user().onDelete(async (userRecord, context
 });
 
 /**
- * PubSub basic event
- *
- * @param {object} data
- * @param {object} attributes
- * @returns {Promise}
- */
-const publishEvent = (data: object = {}, attributes: object = {}) => {
-  const message = JSON.stringify(data);
-  const dataBuffer = Buffer.from(message);
-  return publisher.publish(dataBuffer, attributes);
-};
-
-const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
-admin.initializeApp(adminConfig);
-
-const publisher = pubSub({
-  projectId: adminConfig.projectId,
-}).topic("update-user", {}).publisher();
-
-/**
  * User updates
  *
  * @param {string} uid
@@ -162,7 +142,7 @@ const update = async (nextPageToken) => {
               user.phoneNumber !== data.avatar
             ) {
             console.log('Publishing')
-            await publishEvent({user});
+            await publishEvent("update-user", user);
             console.log('Event sent')
           }
 
