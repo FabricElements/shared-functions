@@ -131,6 +131,13 @@ const publisher = pubSub({
   projectId: adminConfig.projectId,
 }).topic("update-user", {}).publisher();
 
+/**
+ * User updates
+ *
+ * @param {string} uid
+ * @param {string} photoURL
+ * @return {Promise<void>}
+ */
 const update = async (nextPageToken) => {
   // List batch of users, 1000 at a time.
   return admin.auth().listUsers(2, nextPageToken)
@@ -139,22 +146,21 @@ const update = async (nextPageToken) => {
 
       for(const user of listUsersResult.users) {
         try {
-          // Set user profile
-          const batchUser = {
-            avatar: user.photoURL || null,
-            backup: false,
-            name: user.displayName || null
-          };
           const refUser = db.collection("auth-backup").doc(user.uid);
           const doc = await refUser.get();
           const data = doc.data();
 
           if (!doc.exists) {
             console.log(`Adding ${user.uid} to the db`)
-            refUser.set(batchUser, {merge: true});
+            refUser.set(user, {merge: true});
           }
 
-          if(user.displayName !== data.name || user.photoURL !== data.avatar) {
+          if (
+              user.displayName !== data.name ||
+              user.photoURL !== data.avatar ||
+              user.email !== data.avatar ||
+              user.phoneNumber !== data.avatar
+            ) {
             console.log('Publishing')
             await publishEvent({user});
             console.log('Event sent')
